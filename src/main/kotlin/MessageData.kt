@@ -8,3 +8,9 @@ class MessageData(groupId: Long) : Table("messages_$groupId") {
     val time = integer("time")
     val content = varchar("content", 4500)
 }
+
+class ImageData(groupId: Long) : Table("images_$groupId") {
+    val date = date("date")
+    val time = integer("time")
+    val images = varchar("images", 4500)
+}
