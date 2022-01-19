@@ -8,6 +8,7 @@ import net.mamoe.mirai.event.globalEventChannel
 import net.mamoe.mirai.message.data.PlainText
 import net.mamoe.mirai.message.data.content
 import net.mamoe.mirai.utils.info
+import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.addLogger
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
@@ -25,14 +26,15 @@ object MessageRecorder : KotlinPlugin(
 ) {
 
     override fun onEnable() {
+        init()
         logger.info { "Plugin loaded" }
         globalEventChannel().subscribeAlways<GroupMessageEvent>(
-            priority = Config.priority
+            priority = MessageRecorderConfig.priority
         ) {
             val messageData = MessageData(subject.id)
             newSuspendedTransaction(Dispatchers.IO, database) {
                 addLogger(MiraiSqlLogger)
-                org.jetbrains.exposed.sql.SchemaUtils.create(messageData)
+                SchemaUtils.create(messageData)
                 message.forEach { single ->
                     val filter =
                         (single is PlainText) && (!single.content.contains("请使用最新版手机QQ体验新功能")) && (single.content.isNotBlank())
@@ -45,5 +47,8 @@ object MessageRecorder : KotlinPlugin(
                 }
             }
         }
+    }
+    private fun init(){
+        MessageRecorderConfig.reload()
     }
 }

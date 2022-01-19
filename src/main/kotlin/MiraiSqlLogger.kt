@@ -8,6 +8,6 @@ import org.jetbrains.exposed.sql.statements.expandArgs
 
 object MiraiSqlLogger : SqlLogger {
     override fun log(context: StatementContext, transaction: Transaction) {
-        WordCloudPlugin.logger.verbose { "SQL: ${context.expandArgs(transaction)}" }
+        MessageRecorder.logger.verbose { "SQL: ${context.expandArgs(transaction)}" }
     }
 }

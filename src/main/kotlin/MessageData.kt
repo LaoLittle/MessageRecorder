@@ -6,5 +6,5 @@ import org.jetbrains.exposed.sql.javatime.date
 class MessageData(groupId: Long) : Table("messages_$groupId") {
     val date = date("date")
     val time = integer("time")
-    val content = text("content")
+    val content = varchar("content", 4500)
 }

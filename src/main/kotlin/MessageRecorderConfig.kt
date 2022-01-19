@@ -5,7 +5,12 @@ import net.mamoe.mirai.console.data.ValueDescription
 import net.mamoe.mirai.console.data.value
 import net.mamoe.mirai.event.EventPriority
 
-object Config : AutoSavePluginConfig("MessageRecorderConfig") {
-    @ValueDescription("监听器优先级")
+object MessageRecorderConfig : AutoSavePluginConfig("MessageRecorderConfig") {
+    @ValueDescription(
+        """
+        监听优先级
+        顺序分别为 HIGHEST -> HIGH -> NORMAL -> LOW -> LOWEST -> MONITOR
+        """
+    )
     val priority by value(EventPriority.MONITOR)
 }
