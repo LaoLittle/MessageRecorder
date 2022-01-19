@@ -12,6 +12,7 @@ import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.addLogger
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
+import org.laolittle.plugin.MessageDatabase.database
 import java.time.LocalDate
 import java.time.LocalTime
 
@@ -19,7 +20,7 @@ object MessageRecorder : KotlinPlugin(
     JvmPluginDescription(
         id = "org.laolittle.plugin.MessageRecorder",
         name = "MessageRecorder",
-        version = "1.0-SNAPSHOT",
+        version = "1.0",
     ) {
         author("LaoLittle")
     }
