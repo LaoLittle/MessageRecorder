@@ -23,18 +23,18 @@ object MessageDatabase {
     }
 
     private val mutex = Mutex()
-    private var locked = false
 
-    val isLocked get() = locked
+    var isLocked = false
+    private set
 
     suspend fun lock() {
         // while (isLocked) { }
         mutex.lock()
-        locked = true
+        isLocked = true
     }
 
     fun unlock() {
-        locked = false
+        isLocked = false
         mutex.unlock()
     }
 
@@ -45,11 +45,11 @@ object MessageDatabase {
         }
 
         mutex.lock(owner)
-        locked = true
+        isLocked = true
         try {
             return action()
         } finally {
-            locked = false
+            isLocked = false
             mutex.unlock(owner)
         }
     }
