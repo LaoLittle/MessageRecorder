@@ -15,8 +15,7 @@ import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import org.laolittle.plugin.MessageDatabase.database
 import org.laolittle.plugin.MessageDatabase.isLocked
-import java.time.LocalDate
-import java.time.LocalTime
+import java.time.LocalDateTime
 
 object MessageRecorder : KotlinPlugin(
     JvmPluginDescription(
@@ -36,8 +35,7 @@ object MessageRecorder : KotlinPlugin(
         ) {
             if (!isLocked) {
                 newSuspendedTransaction(Dispatchers.IO, database) {
-                    val dateNow = LocalDate.now()
-                    val dayWithYear = "${(LocalTime.now().hour * 60) + LocalTime.now().minute}".toInt()
+                    val now = LocalDateTime.now()
                     addLogger(MiraiSqlLogger)
                     message.forEach { single ->
                         val filter =
@@ -46,16 +44,14 @@ object MessageRecorder : KotlinPlugin(
                             val messageData = MessageData(subject.id)
                             SchemaUtils.create(messageData)
                             messageData.insert { data ->
-                                data[date] = dateNow
-                                data[time] = dayWithYear
+                                data[time] = now
                                 data[content] = single.content
                             }
                         } else if (single is Image) {
                             val imageData = ImageData(subject.id)
                             SchemaUtils.create(imageData)
                             imageData.insert { data ->
-                                data[date] = dateNow
-                                data[time] = dayWithYear
+                                data[time] = now
                                 data[images] = single.imageId
                             }
                         }
