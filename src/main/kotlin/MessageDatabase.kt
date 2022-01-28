@@ -25,7 +25,7 @@ object MessageDatabase {
     private val mutex = Mutex()
 
     var isLocked = false
-    private set
+        private set
 
     suspend fun lock() {
         // while (isLocked) { }

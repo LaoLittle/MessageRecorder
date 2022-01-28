@@ -34,9 +34,8 @@ object MessageRecorder : KotlinPlugin(
         globalEventChannel().subscribeAlways<GroupMessageEvent>(
             priority = MessageRecorderConfig.priority
         ) {
-
-            newSuspendedTransaction(Dispatchers.IO, database) {
-                if (!isLocked) {
+            if (!isLocked) {
+                newSuspendedTransaction(Dispatchers.IO, database) {
                     val dateNow = LocalDate.now()
                     val dayWithYear = "${(LocalTime.now().hour * 60) + LocalTime.now().minute}".toInt()
                     addLogger(MiraiSqlLogger)
